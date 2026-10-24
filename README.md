@@ -64,12 +64,14 @@ To go back to a local CSV file, set `SHEET_ID = ""` in `src/dashboard/config.ts`
 
 Later, donors will be able to log in and see this page. That needs a host with login protection; the switch is in `astro.config.mjs`.
 
-## Putting it online (free)
+## Online
 
-Any static host works. The easiest options:
+The site is live at **https://sambastreet.charity**, hosted for free on GitHub Pages.
 
-- **Netlify** or **Vercel**: connect the GitHub repo, build command `npm run build`, output folder `dist`.
-- **GitHub Pages**: see Astro's guide at https://docs.astro.build/en/guides/deploy/github/
+- **Publish a change:** commit and push to `main`. GitHub builds and publishes the site in about a minute (see the Actions tab of the repo).
+- **Repo:** https://github.com/Beekiii/samba-street (public, so never commit secrets).
+- **Domain:** bought at Namecheap. DNS (Advanced DNS tab): four `A` records for `@` pointing to `185.199.108.153`, `185.199.109.153`, `185.199.110.153` and `185.199.111.153`, and a `CNAME` record `www` pointing to `beekiii.github.io.`
+- The file `public/CNAME` tells GitHub Pages which domain to use. Don't delete it.
 
 ## Still to fill in
 
