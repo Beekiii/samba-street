@@ -63,7 +63,7 @@ Unsplash blocks scripted downloads from its website. Downloading straight from `
 - **Real photos** of our own kids and team, to replace the stock photos.
 - **Team:** no names yet. The old About page had placeholder names, and it has been removed.
 - **Don't promise things the user hasn't confirmed.** Earlier drafts invented details: specific kit items (boots, shin guards), "kit to keep", "transport is on us", paying tournament entry fees, and selection "on enthusiasm and attitude". These were removed. Gear is now described generally, as "everything needed to play". Check with the user before adding specifics like these.
-- **Online** at https://sambastreet.charity via GitHub Pages (public repo `Beekiii/samba-street`). Every push to `main` deploys through `.github/workflows/deploy.yml`. Domain is at Namecheap; DNS details are in README.
+- **Online** at https://sambastreet.charity via GitHub Pages (public repo `GodsPlan027/samba-street`). Every push to `main` deploys through `.github/workflows/deploy.yml`. Domain is at Namecheap; DNS details are in README.
 
 ## Finance dashboard
 
