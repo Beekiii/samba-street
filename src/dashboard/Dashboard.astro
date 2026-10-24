@@ -1,0 +1,802 @@
+---
+// Private finance dashboard. Only available with `npm run dev` (see astro.config.mjs).
+// All numbers come from data/finances.csv.
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { SITE_NAME } from "../site";
+import { COLOR_IN, COLOR_OUT } from "./config";
+import {
+  loadFinances,
+  source,
+  totals,
+  byMonth,
+  byCategory,
+  money,
+  moneyCompact,
+  monthLabel,
+  dayLabel,
+  niceTicks,
+} from "./finances";
+
+const { transactions, problems, error } = await loadFinances();
+const sums = totals(transactions);
+const months = byMonth(transactions);
+const spending = byCategory(transactions, "out");
+const income = byCategory(transactions, "in");
+const newestFirst = [...transactions].reverse();
+const lastDate = transactions.at(-1)?.date;
+const n = months.length;
+
+// Month-by-month columns
+const flowTicks = niceTicks(0, Math.max(1, ...months.flatMap((m) => [m.in, m.out])));
+const flowTop = flowTicks.at(-1)!;
+const pctFlow = (v: number) => (v / flowTop) * 100;
+
+// Balance line
+const balTicks = niceTicks(
+  Math.min(0, ...months.map((m) => m.balance)),
+  Math.max(1, ...months.map((m) => m.balance)),
+);
+const balLo = balTicks[0];
+const balHi = balTicks.at(-1)!;
+const pctBal = (v: number) => ((v - balLo) / (balHi - balLo)) * 100;
+const xPct = (i: number) => ((i + 0.5) / n) * 100;
+const linePoints = months.map((m, i) => `${xPct(i)},${100 - pctBal(m.balance)}`).join(" ");
+const zeroY = 100 - pctBal(0);
+const areaPoints = n
+  ? `${xPct(0)},${zeroY} ${linePoints} ${xPct(n - 1)},${zeroY}`
+  : "";
+
+// Show fewer month labels when there are many months
+const labelEvery = Math.ceil(n / 12);
+const tip = (m: (typeof months)[number]) =>
+  `${monthLabel(m.key, true)}\nIn: ${money(m.in, true)}\nOut: ${money(m.out, true)}\nBalance: ${money(m.balance, true)}`;
+---
+
+<BaseLayout title={`Finances – ${SITE_NAME}`} noindex>
+  <div class="dash" style={`--in:${COLOR_IN};--out:${COLOR_OUT}`}>
+    <nav class="wrap top">
+      <a href="/" class="wordmark">{SITE_NAME}</a>
+      <span class="private">Private · only on your computer</span>
+    </nav>
+
+    <header class="wrap head">
+      <h1>Finances</h1>
+      <p class="lede">Every euro that comes in, every euro that goes out, and where it goes.</p>
+      <p class="meta">
+        {lastDate ? <>Last transaction {dayLabel(lastDate)} · </> : null}
+        {transactions.length} {transactions.length === 1 ? "transaction" : "transactions"} · from{" "}
+        {source.url ? <a href={source.url} target="_blank" rel="noopener">{source.name}</a> : <code>{source.name}</code>}
+      </p>
+    </header>
+
+    {
+      error && (
+        <section class="wrap problems" aria-labelledby="error-h">
+          <h2 id="error-h">Couldn't read the finances</h2>
+          <p class="note">{error}</p>
+        </section>
+      )
+    }
+
+    {
+      problems.length > 0 && (
+        <section class="wrap problems" aria-labelledby="problems-h">
+          <h2 id="problems-h">
+            {problems.length === 1 ? "1 row" : `${problems.length} rows`} in the spreadsheet
+            need fixing
+          </h2>
+          <p class="note">These rows are left out of the numbers below until they are fixed.</p>
+          <ul>
+            {problems.map((p) => (
+              <li>
+                <span class="row">Row {p.row}</span>
+                {p.message}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      error ? null : transactions.length === 0 ? (
+        <section class="wrap empty">
+          <p>
+            No transactions yet. Add rows to the{" "}
+            {source.url ? <a href={source.url} target="_blank" rel="noopener">{source.name}</a> : <code>{source.name}</code>}{" "}
+            and refresh this page.
+          </p>
+        </section>
+      ) : (
+        <>
+          {/* ---------- Key figures ---------- */}
+          <section class="wrap figures" aria-label="Key figures">
+            <div class="hero-fig">
+              <span class="label">Balance</span>
+              <span class="value">{money(sums.balance)}</span>
+              <span class="sub">Money in minus money out, all time</span>
+            </div>
+            <div class="tiles">
+              <div>
+                <span class="label">
+                  <i class="key" style="background:var(--in)" />
+                  Money in
+                </span>
+                <span class="value">{money(sums.moneyIn)}</span>
+              </div>
+              <div>
+                <span class="label">
+                  <i class="key" style="background:var(--out)" />
+                  Money out
+                </span>
+                <span class="value">{money(sums.moneyOut)}</span>
+              </div>
+              <div>
+                <span class="label">Donations</span>
+                <span class="value">{sums.donations}</span>
+              </div>
+            </div>
+          </section>
+
+          {/* ---------- Month by month ---------- */}
+          <section class="wrap block" aria-labelledby="months-h">
+            <div class="block-head">
+              <h2 id="months-h">Month by month</h2>
+              <ul class="legend">
+                <li>
+                  <i class="key" style="background:var(--in)" />
+                  Money in
+                </li>
+                <li>
+                  <i class="key" style="background:var(--out)" />
+                  Money out
+                </li>
+              </ul>
+            </div>
+
+            <div class={`chart${n > 6 ? " many" : ""}`} style={`--n:${n}`}>
+              <div class="plot">
+                {flowTicks.map((v) => (
+                  <div class="grid" style={`bottom:${pctFlow(v)}%`}>
+                    <span>{moneyCompact(v)}</span>
+                  </div>
+                ))}
+                <div class="cols">
+                  {months.map((m) => (
+                    <div class="col" tabindex="0" data-tip={tip(m)} aria-label={tip(m)}>
+                      {m.in > 0 && <span class="bar" style={`height:${pctFlow(m.in)}%;background:var(--in)`} />}
+                      {m.out > 0 && <span class="bar" style={`height:${pctFlow(m.out)}%;background:var(--out)`} />}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div class="xlabels">
+                {months.map((m, i) => (
+                  <span class={i % 2 ? "odd" : ""}>
+                    {i % labelEvery === 0 && (
+                      <>
+                        {monthLabel(m.key)}
+                        {(i === 0 || m.key.endsWith("-01")) && <small>{m.key.slice(0, 4)}</small>}
+                      </>
+                    )}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <h3 class="sub-h">Balance over time</h3>
+            <div class={`chart balance${n > 6 ? " many" : ""}`} style={`--n:${n}`}>
+              <div class="plot">
+                {balTicks.map((v) => (
+                  <div class={`grid${v === 0 ? " zero" : ""}`} style={`bottom:${pctBal(v)}%`}>
+                    <span>{moneyCompact(v)}</span>
+                  </div>
+                ))}
+                <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                  <polygon points={areaPoints} fill="var(--text)" fill-opacity="0.06" />
+                  <polyline
+                    points={linePoints}
+                    fill="none"
+                    stroke="var(--text)"
+                    stroke-width="2"
+                    stroke-linejoin="round"
+                    stroke-linecap="round"
+                    vector-effect="non-scaling-stroke"
+                  />
+                </svg>
+                <span
+                  class="end-dot"
+                  style={`left:${xPct(n - 1)}%;bottom:${pctBal(months[n - 1].balance)}%`}
+                />
+                <span
+                  class="end-label"
+                  style={`left:${xPct(n - 1)}%;bottom:${pctBal(months[n - 1].balance)}%`}
+                >
+                  {money(months[n - 1].balance)}
+                </span>
+                <div class="cols">
+                  {months.map((m) => (
+                    <div class="col" tabindex="0" data-tip={tip(m)} aria-label={tip(m)} />
+                  ))}
+                </div>
+              </div>
+              <div class="xlabels">
+                {months.map((m, i) => (
+                  <span class={i % 2 ? "odd" : ""}>
+                    {i % labelEvery === 0 && (
+                      <>
+                        {monthLabel(m.key)}
+                        {(i === 0 || m.key.endsWith("-01")) && <small>{m.key.slice(0, 4)}</small>}
+                      </>
+                    )}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <details class="as-table">
+              <summary>Show months as a table</summary>
+              <div class="scroll">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Month</th>
+                      <th class="num">In</th>
+                      <th class="num">Out</th>
+                      <th class="num">Net</th>
+                      <th class="num">Balance</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[...months].reverse().map((m) => (
+                      <tr>
+                        <td>{monthLabel(m.key, true)}</td>
+                        <td class="num">{money(m.in, true)}</td>
+                        <td class="num">{money(m.out, true)}</td>
+                        <td class="num">{money(m.in - m.out, true)}</td>
+                        <td class="num">{money(m.balance, true)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </details>
+          </section>
+
+          {/* ---------- Categories ---------- */}
+          <section class="wrap block split" aria-label="Categories">
+            <div>
+              <h2>Where the money goes</h2>
+              <ul class="hbars">
+                {spending.map((c) => (
+                  <li>
+                    <span class="name">{c.name}</span>
+                    <span class="amt">
+                      {money(c.amount)} <span class="pct">{Math.round(c.share * 100)}%</span>
+                    </span>
+                    <span class="track">
+                      <span class="fill" style={`width:${c.share * 100}%;background:var(--out)`} />
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h2>Where the money comes from</h2>
+              <ul class="hbars">
+                {income.map((c) => (
+                  <li>
+                    <span class="name">{c.name}</span>
+                    <span class="amt">
+                      {money(c.amount)} <span class="pct">{Math.round(c.share * 100)}%</span>
+                    </span>
+                    <span class="track">
+                      <span class="fill" style={`width:${c.share * 100}%;background:var(--in)`} />
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+
+          {/* ---------- Transactions ---------- */}
+          <section class="wrap block" aria-labelledby="tx-h">
+            <h2 id="tx-h">All transactions</h2>
+            <div class="scroll">
+              <table class="tx">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th class="num">Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {newestFirst.map((t) => (
+                    <tr>
+                      <td class="date">{dayLabel(t.date)}</td>
+                      <td>
+                        {t.description}
+                        <span class="cat-inline">{t.category}</span>
+                      </td>
+                      <td class="cat">
+                        <i class="key" style={`background:var(--${t.type})`} />
+                        {t.category}
+                      </td>
+                      <td class="num">
+                        {t.type === "in" ? "+" : "−"}
+                        {money(t.amount, true)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </>
+      )
+    }
+
+    <footer class="wrap foot">
+      <p>
+        To add a transaction, add a row to the {source.name} and refresh. This page is not
+        part of the public website.
+      </p>
+    </footer>
+
+    <div class="tip" id="tip" role="tooltip" hidden></div>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  // Small tooltip for the charts. The same numbers are in the tables, so it is optional.
+  (() => {
+    const tip = document.getElementById("tip");
+    if (!tip) return;
+    const show = (el) => {
+      tip.textContent = el.dataset.tip;
+      tip.hidden = false;
+      const r = el.getBoundingClientRect();
+      const w = tip.offsetWidth;
+      const left = Math.min(
+        Math.max(8, r.left + r.width / 2 - w / 2),
+        document.documentElement.clientWidth - w - 8,
+      );
+      tip.style.left = left + window.scrollX + "px";
+      tip.style.top = r.top + window.scrollY - tip.offsetHeight - 8 + "px";
+    };
+    const hide = () => (tip.hidden = true);
+    document.querySelectorAll("[data-tip]").forEach((el) => {
+      el.addEventListener("pointerenter", () => show(el));
+      el.addEventListener("pointerleave", hide);
+      el.addEventListener("focus", () => show(el));
+      el.addEventListener("blur", hide);
+    });
+  })();
+</script>
+
+<style>
+  .dash {
+    padding-bottom: 64px;
+  }
+  code {
+    font-size: 0.9em;
+    background: rgba(20, 20, 20, 0.05);
+    padding: 1px 4px;
+  }
+
+  /* ---------- Top ---------- */
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .wordmark {
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .wordmark::before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 6px 0 0 var(--sun);
+    margin-right: 6px;
+  }
+  .private {
+    font-size: 0.875rem;
+    color: var(--muted);
+    text-align: right;
+  }
+
+  .head {
+    padding: 56px 0 40px;
+  }
+  h1 {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+  .lede {
+    margin-top: 16px;
+    font-size: 1.15rem;
+    max-width: 30em;
+  }
+  .meta {
+    margin-top: 12px;
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
+
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  /* ---------- Problems / empty ---------- */
+  .problems {
+    border-left: 3px solid var(--text);
+    padding: 4px 0 4px 20px;
+    margin-bottom: 40px;
+  }
+  .problems h2 {
+    font-size: 1.05rem;
+  }
+  .problems .note {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-top: 4px;
+  }
+  .problems ul {
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.925rem;
+  }
+  .problems li + li {
+    margin-top: 6px;
+  }
+  .problems .row {
+    font-weight: 600;
+    margin-right: 10px;
+  }
+  .empty {
+    padding: 40px 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  /* ---------- Key figures ---------- */
+  .figures {
+    display: grid;
+    gap: 32px;
+    border-top: 1px solid var(--rule);
+    padding-top: 28px;
+  }
+  @media (min-width: 820px) {
+    .figures {
+      grid-template-columns: 1fr 1.6fr;
+      align-items: end;
+    }
+  }
+  .label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
+  .value {
+    display: block;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-top: 4px;
+  }
+  .hero-fig .value {
+    font-size: clamp(3rem, 8vw, 4.5rem);
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+  }
+  .hero-fig .sub {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .tiles > div {
+    border-top: 1px solid var(--rule);
+    padding-top: 12px;
+  }
+  .tiles .value {
+    font-size: clamp(1.25rem, 3.5vw, 1.75rem);
+  }
+  .key {
+    display: inline-block;
+    flex: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+  }
+
+  /* ---------- Blocks ---------- */
+  .block {
+    margin-top: 72px;
+    border-top: 1px solid var(--rule);
+    padding-top: 28px;
+  }
+  .block-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px 24px;
+  }
+  .legend {
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
+  .legend li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sub-h {
+    margin-top: 48px;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  /* ---------- Charts ---------- */
+  .chart {
+    --gutter: 52px;
+    margin-top: 28px;
+  }
+  .plot {
+    position: relative;
+    height: 240px;
+    margin-left: var(--gutter);
+  }
+  .balance .plot {
+    height: 180px;
+  }
+  .grid {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 0;
+    border-top: 1px solid var(--rule);
+  }
+  .grid.zero {
+    border-top-color: var(--muted);
+  }
+  .grid span {
+    position: absolute;
+    right: calc(100% + 10px);
+    transform: translateY(-50%);
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .cols {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(var(--n), 1fr);
+  }
+  .col {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 2px;
+    outline-offset: -2px;
+  }
+  .col:hover,
+  .col:focus-visible {
+    background: rgba(20, 20, 20, 0.04);
+  }
+  .bar {
+    width: min(24px, 36%);
+    min-height: 2px;
+    border-radius: 4px 4px 0 0;
+  }
+  .balance svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .end-dot {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    margin: 0 0 -5px -5px;
+    border-radius: 50%;
+    background: var(--text);
+    box-shadow: 0 0 0 2px var(--bg);
+    pointer-events: none;
+  }
+  .end-label {
+    position: absolute;
+    transform: translate(calc(-100% + 6px), -110%);
+    white-space: nowrap;
+    font-size: 0.875rem;
+    font-weight: 600;
+    pointer-events: none;
+  }
+  .xlabels {
+    display: grid;
+    grid-template-columns: repeat(var(--n), 1fr);
+    margin-left: var(--gutter);
+    padding-top: 8px;
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.3;
+  }
+  .xlabels small {
+    display: block;
+    font-size: 0.7rem;
+  }
+  @media (max-width: 560px) {
+    .many .xlabels .odd {
+      visibility: hidden;
+    }
+  }
+
+  .tip {
+    position: absolute;
+    z-index: 10;
+    padding: 8px 10px;
+    background: var(--text);
+    color: var(--bg);
+    font-size: 0.8rem;
+    line-height: 1.5;
+    white-space: pre-line;
+    pointer-events: none;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- Tables ---------- */
+  .as-table {
+    margin-top: 28px;
+    font-size: 0.9rem;
+  }
+  .as-table summary {
+    cursor: pointer;
+    color: var(--muted);
+  }
+  .scroll {
+    overflow-x: auto;
+    margin-top: 16px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.925rem;
+  }
+  th {
+    text-align: left;
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: var(--muted);
+    padding: 0 16px 8px 0;
+    border-bottom: 1px solid var(--text);
+    white-space: nowrap;
+  }
+  td {
+    padding: 10px 16px 10px 0;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  th:last-child,
+  td:last-child {
+    padding-right: 0;
+  }
+  .num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .tx .date,
+  .tx .cat {
+    white-space: nowrap;
+  }
+  .tx .cat {
+    color: var(--muted);
+  }
+  .tx .cat .key {
+    margin-right: 8px;
+  }
+  .tx td:nth-child(2) {
+    min-width: 10em;
+  }
+  .cat-inline {
+    display: none;
+  }
+  @media (max-width: 560px) {
+    .tx th:nth-child(3),
+    .tx td.cat {
+      display: none;
+    }
+    .cat-inline {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+  }
+
+  /* ---------- Category bars ---------- */
+  .split {
+    display: grid;
+    gap: 56px;
+  }
+  @media (min-width: 820px) {
+    .split {
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+    }
+  }
+  .hbars {
+    margin: 20px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .hbars li {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 6px 16px;
+    padding: 12px 0;
+  }
+  .hbars li + li {
+    border-top: 1px solid var(--rule);
+  }
+  .hbars .amt {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .hbars .pct {
+    font-weight: 400;
+    color: var(--muted);
+    margin-left: 6px;
+  }
+  .hbars .track {
+    grid-column: 1 / -1;
+    height: 12px;
+  }
+  .hbars .fill {
+    display: block;
+    height: 100%;
+    min-width: 2px;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .foot {
+    margin-top: 72px;
+    border-top: 1px solid var(--rule);
+    padding-top: 20px;
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
+</style>

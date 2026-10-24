@@ -1,0 +1,10 @@
+<symbol id="dancer" viewBox="0 0 100 100">
+  <g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M51 31 Q49 43 45 55"/>
+    <path d="M51 31 L65 26 L72 12"/>
+    <path d="M51 31 L37 39 L27 33"/>
+    <path d="M45 55 L39 72 L42 90 L50 90"/>
+    <path d="M45 55 L63 61 L61 79 L66 80"/>
+  </g>
+  <circle cx="48" cy="15" r="7.5" fill="currentColor"/>
+</symbol>

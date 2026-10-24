@@ -1,0 +1,718 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { CONTACT_EMAIL } from "../site";
+
+const facts = [
+  { value: "20", label: "Players" },
+  { value: "9–12", label: "Years old" },
+  { value: "2×", label: "Training a week" },
+  { value: "R0", label: "Cost" },
+];
+
+const steps = [
+  "We partner with one primary school.",
+  "Kids aged 9 to 12 at that school can sign up.",
+  "We select 20 players.",
+  "They train twice a week, play tournaments and get all the gear they need.",
+];
+
+const provide = [
+  {
+    img: "/images/training.jpg",
+    alt: "Kids playing football together on a sunny field",
+    title: "Training",
+    text: "Two sessions a week, focused on skills, creativity and playing as a team.",
+  },
+  {
+    img: "/images/tournament.jpg",
+    alt: "A youth match on a dusty pitch, the goalkeeper ready in goal",
+    title: "Tournaments",
+    text: "Throughout the year we enter the team in tournaments, so they get to play real matches.",
+  },
+  {
+    img: "/images/gear.jpg",
+    alt: "Bare feet gathered around a worn football",
+    title: "Gear",
+    text: "Every player gets the kit and gear they need to train and play.",
+  },
+];
+
+const ticker = ["Training twice a week", "Tournaments", "Full gear", "Free for every kid"];
+---
+
+<BaseLayout>
+  <!-- Hero: full-bleed photo -->
+  <header class="hero">
+    <img
+      class="hero-img"
+      src="/images/hero.jpg"
+      alt="Children playing a football match on a dusty field in a South African township"
+      width="2400"
+      height="1600"
+      fetchpriority="high"
+    />
+    <div class="hero-shade"></div>
+
+    <nav class="wrap top">
+      <a href="/" class="wordmark">Samba Street</a>
+      <a href={`mailto:${CONTACT_EMAIL}`} class="top-link">Contact</a>
+    </nav>
+
+    <div class="wrap hero-content">
+      <p class="place">Khayelitsha, Cape Town</p>
+      <h1>Free football<br />for kids who<br />love the game<span class="dot">.</span></h1>
+      <p class="intro">
+        A non-profit football academy for 20 children aged 9 to 12 in Khayelitsha. Training,
+        tournaments and gear – free for the kids and their school.
+      </p>
+    </div>
+  </header>
+
+  <main>
+    <section class="wrap">
+      <dl class="facts">
+        {
+          facts.map((f) => (
+            <div>
+              <dt>{f.label}</dt>
+              <dd>{f.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <!-- About + photo pair -->
+    <section class="wrap row reveal">
+      <h2>About</h2>
+      <div class="body">
+        <p>
+          Football gives kids friends, confidence and a place to belong. But club fees, boots and
+          kits add up, and not every family can afford them.
+        </p>
+        <p>
+          Samba Street brings that chance to Khayelitsha, one of the largest townships in South
+          Africa. Together with a local school, we give a group of kids the chance to train
+          properly and play as a team, at no cost to anyone.
+        </p>
+      </div>
+    </section>
+
+    <section class="wrap pair reveal" aria-label="Photos">
+      <figure class="pair-main">
+        <img
+          src="/images/khayelitsha-centre.jpg"
+          alt="Children playing on the pitch of the Football for Hope Centre in Khayelitsha"
+          width="1476"
+          height="984"
+          loading="lazy"
+        />
+        <figcaption>Football for Hope Centre, Khayelitsha.</figcaption>
+      </figure>
+      <figure class="pair-side">
+        <img
+          src="/images/portrait.jpg"
+          alt="Portrait of a smiling boy"
+          width="1000"
+          height="1500"
+          loading="lazy"
+        />
+      </figure>
+    </section>
+
+    <!-- Moving ticker -->
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track">
+        {
+          [0, 1].map(() => (
+            <span>
+              {ticker.map((t) => (
+                <>
+                  {t}
+                  <i>●</i>
+                </>
+              ))}
+            </span>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- How it works: sticky photo + steps -->
+    <section class="wrap how reveal">
+      <div class="how-media">
+        <figure>
+          <img
+            src="/images/khayelitsha-pitch.jpg"
+            alt="A girl dribbling a ball on a football pitch surrounded by houses in Khayelitsha"
+            width="1600"
+            height="1071"
+            loading="lazy"
+          />
+          <figcaption>Training on a pitch in Khayelitsha.</figcaption>
+        </figure>
+      </div>
+      <div>
+        <h2 class="label">How it works</h2>
+        <ol class="body steps">
+          {steps.map((s) => <li>{s}</li>)}
+        </ol>
+      </div>
+    </section>
+
+    <!-- What we provide: staggered photo tiles -->
+    <section class="wrap provide reveal">
+      <div class="provide-head">
+        <h2 class="label">What we provide</h2>
+        <p class="body">Everything a young player needs. Nothing for the family to pay.</p>
+        <p class="swipe-hint" aria-hidden="true">Swipe →</p>
+      </div>
+      <div class="tiles">
+        {
+          provide.map((p, i) => (
+            <article class="tile">
+              <div class="tile-img">
+                <img src={p.img} alt={p.alt} loading="lazy" />
+              </div>
+              <span class="tile-num">0{i + 1}</span>
+              <h3>{p.title}</h3>
+              <p>{p.text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Partner school callout over photo -->
+    <section class="callout">
+      <img
+        class="callout-img"
+        src="/images/street-sunset.jpg"
+        alt=""
+        width="1600"
+        height="2400"
+        loading="lazy"
+      />
+      <div class="callout-shade"></div>
+      <div class="wrap callout-content">
+        <p class="callout-label">Now looking for</p>
+        <h2>A partner school.</h2>
+        <p class="callout-text">
+          Are you a primary school that would like to offer your students free football training?
+          We'd love to hear from you.
+        </p>
+        <a class="email" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL} →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap bottom">
+    <span>© {new Date().getFullYear()} Samba Street</span>
+    <span>Non-profit football academy · Khayelitsha, Cape Town</span>
+    <p class="credits">
+      Photos: Thato Moiketsi, Rea Mapelele and others via Pexels; Andrea Grips (<a
+        href="https://commons.wikimedia.org/wiki/File:Khayelitsha_Football_for_Hope_Centre.jpg"
+        >CC BY-SA 3.0</a
+      >) and Ed Suter (<a
+        href="https://commons.wikimedia.org/wiki/File:Young_girl_practices_her_soccer_skills,_Khayelitsha,_Cape_Town.jpg"
+        >CC BY-SA 4.0</a
+      >) via Wikimedia Commons.
+    </p>
+  </footer>
+
+  <script>
+    // Fade sections in as they scroll into view.
+    const els = document.querySelectorAll(".reveal");
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver(
+        (entries) =>
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("in");
+              io.unobserve(e.target);
+            }
+          }),
+        { threshold: 0.12 }
+      );
+      els.forEach((el) => io.observe(el));
+    } else {
+      els.forEach((el) => el.classList.add("in"));
+    }
+  </script>
+</BaseLayout>
+
+<style>
+  img {
+    display: block;
+    max-width: 100%;
+  }
+  figure {
+    margin: 0;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    overflow: hidden;
+  }
+  .hero-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 15%;
+  }
+  .hero-shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.35) 0%,
+      rgba(0, 0, 0, 0) 30%,
+      rgba(0, 0, 0, 0.15) 55%,
+      rgba(0, 0, 0, 0.7) 100%
+    );
+  }
+  .top {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 28px;
+  }
+  .wordmark {
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .wordmark::before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 6px 0 0 var(--sun);
+    margin-right: 6px;
+  }
+  .top-link {
+    text-decoration: none;
+    opacity: 0.85;
+  }
+  .top-link:hover {
+    opacity: 1;
+  }
+  .hero-content {
+    position: relative;
+    margin-top: auto;
+    padding-bottom: 56px;
+    display: grid;
+    gap: 24px;
+    align-items: end;
+  }
+  @media (min-width: 900px) {
+    .hero-content {
+      grid-template-columns: 2fr 1fr;
+      padding-bottom: 72px;
+    }
+  }
+  .place {
+    grid-column: 1 / -1;
+    font-size: 0.875rem;
+    opacity: 0.85;
+    margin-bottom: -8px;
+  }
+  .place::before {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--sun);
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+  h1 {
+    font-size: clamp(2.75rem, 9vw, 6.75rem);
+    font-weight: 500;
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+  }
+  .dot {
+    color: var(--sun);
+  }
+  .intro {
+    font-size: 1.1rem;
+    max-width: 24em;
+    opacity: 0.9;
+  }
+
+  /* ---------- Facts ---------- */
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin: 0;
+  }
+  @media (min-width: 720px) {
+    .facts {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .facts div {
+    padding: 28px 0 32px;
+    border-bottom: 1px solid var(--rule);
+  }
+  dt {
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
+  dd {
+    margin: 6px 0 0;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+
+  /* ---------- Shared text styles ---------- */
+  .row {
+    display: grid;
+    gap: 16px;
+    padding-top: 96px;
+    padding-bottom: 56px;
+  }
+  @media (min-width: 720px) {
+    .row {
+      grid-template-columns: 1fr 2fr;
+      gap: 40px;
+      padding-top: 128px;
+    }
+  }
+  .row h2,
+  .label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--muted);
+    padding-top: 6px;
+  }
+  .body {
+    font-size: clamp(1.25rem, 2.4vw, 1.6rem);
+    line-height: 1.4;
+    letter-spacing: -0.015em;
+  }
+  .body p + p {
+    margin-top: 1em;
+  }
+
+  /* ---------- Photo pair ---------- */
+  .pair {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 12px;
+    align-items: end;
+    padding-bottom: 96px;
+  }
+  @media (min-width: 720px) {
+    .pair {
+      gap: 24px;
+      padding-bottom: 112px;
+    }
+  }
+  .pair img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .pair-main img {
+    aspect-ratio: 3 / 2;
+  }
+  .pair-side img {
+    aspect-ratio: 4 / 5;
+    filter: grayscale(1) contrast(1.05);
+  }
+  @media (min-width: 720px) {
+    .pair-side {
+      transform: translateY(64px);
+    }
+  }
+  figcaption {
+    margin-top: 12px;
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
+
+  /* ---------- Ticker ---------- */
+  .ticker {
+    overflow: hidden;
+    background: var(--accent);
+    color: #fff;
+    padding: 22px 0;
+    margin-top: 32px;
+  }
+  .ticker-track {
+    display: flex;
+    width: max-content;
+    animation: ticker 40s linear infinite;
+  }
+  .ticker-track span {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    white-space: nowrap;
+  }
+  .ticker i {
+    font-style: normal;
+    color: var(--sun);
+    font-size: 0.4em;
+    vertical-align: middle;
+    margin: 0 0.9em;
+  }
+  @keyframes ticker {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ticker-track {
+      animation: none;
+    }
+  }
+
+  /* ---------- How it works ---------- */
+  .how {
+    display: grid;
+    gap: 40px;
+    padding-top: 112px;
+    padding-bottom: 112px;
+    border-bottom: 1px solid var(--rule);
+  }
+  @media (min-width: 900px) {
+    .how {
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+    .how-media {
+      position: sticky;
+      top: 32px;
+    }
+  }
+  .how-media img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+  @media (min-width: 900px) {
+    .how-media img {
+      aspect-ratio: 4 / 5;
+    }
+  }
+  .steps {
+    list-style: none;
+    margin: 24px 0 0;
+    padding: 0;
+    counter-reset: step;
+  }
+  .steps li {
+    counter-increment: step;
+    display: grid;
+    grid-template-columns: 2.5em 1fr;
+    padding: 24px 0;
+    border-top: 1px solid var(--rule);
+  }
+  .steps li::before {
+    content: counter(step, decimal-leading-zero);
+    color: var(--accent);
+    font-size: 0.9rem;
+    padding-top: 0.45em;
+  }
+
+  /* ---------- What we provide ---------- */
+  .provide {
+    padding-top: 112px;
+    padding-bottom: 136px;
+  }
+  .provide-head {
+    display: grid;
+    gap: 16px;
+    margin-bottom: 56px;
+  }
+  @media (min-width: 720px) {
+    .provide-head {
+      grid-template-columns: 1fr 2fr;
+      gap: 40px;
+    }
+  }
+  /* Phones: swipeable row. Larger screens: staggered grid. */
+  .tiles {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 78%;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    margin-right: -16px;
+    padding-right: 16px;
+  }
+  .tiles::-webkit-scrollbar {
+    display: none;
+  }
+  .tile {
+    scroll-snap-align: start;
+  }
+  @media (min-width: 720px) {
+    .tiles {
+      grid-auto-flow: row;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px 24px;
+      overflow: visible;
+      margin-right: 0;
+      padding-right: 0;
+    }
+    .tile:nth-child(2) {
+      margin-top: 80px;
+    }
+    .tile:nth-child(3) {
+      margin-top: 32px;
+    }
+  }
+  .swipe-hint {
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
+  @media (min-width: 720px) {
+    .swipe-hint {
+      display: none;
+    }
+  }
+  .tile-img {
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .tile-img img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  .tile:hover .tile-img img {
+    transform: scale(1.04);
+  }
+  .tile-num {
+    font-size: 0.875rem;
+    color: var(--accent);
+  }
+  .tile h3 {
+    margin-top: 4px;
+    font-size: 1.5rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+  .tile p {
+    margin-top: 8px;
+    color: var(--muted);
+    max-width: 22em;
+  }
+
+  /* ---------- Callout ---------- */
+  .callout {
+    position: relative;
+    color: #fff;
+    overflow: hidden;
+  }
+  .callout-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 60%;
+  }
+  .callout-shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.35));
+  }
+  .callout-content {
+    position: relative;
+    padding-top: 160px;
+    padding-bottom: 160px;
+  }
+  .callout-label {
+    font-size: 0.875rem;
+    opacity: 0.75;
+  }
+  .callout h2 {
+    margin-top: 12px;
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .callout-text {
+    margin-top: 24px;
+    max-width: 28em;
+    font-size: 1.15rem;
+    opacity: 0.85;
+  }
+  .email {
+    display: inline-block;
+    margin-top: 32px;
+    font-size: clamp(1.1rem, 2.6vw, 1.5rem);
+    text-decoration: none;
+    border-bottom: 2px solid var(--sun);
+    padding-bottom: 2px;
+    overflow-wrap: anywhere;
+  }
+  .email:hover {
+    color: var(--sun);
+  }
+
+  /* ---------- Footer ---------- */
+  .bottom {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 28px;
+    padding-bottom: 40px;
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
+
+  .credits {
+    flex-basis: 100%;
+    font-size: 0.75rem;
+    opacity: 0.8;
+  }
+
+  /* ---------- Scroll reveal ---------- */
+  :global(.js) .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 0.8s ease,
+      transform 0.8s ease;
+  }
+  :global(.js) .reveal:global(.in) {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+</style>

@@ -1,0 +1,57 @@
+/* Samba Street – change colors and fonts here. */
+:root {
+  --bg: #f7f5f0;
+  --text: #141414;
+  --muted: #6b6a66;
+  --rule: #dcd8ce;
+  --accent: #0b6e4f; /* samba green */
+  --sun: #f2b705; /* used sparingly */
+
+  --font: "Inter Tight", system-ui, -apple-system, sans-serif;
+  --max: 1080px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+/* Width via margins (not padding) so section borders line up with the text. */
+.wrap {
+  width: min(var(--max) - 80px, 100% - 32px);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (min-width: 720px) {
+  .wrap {
+    width: min(var(--max) - 80px, 100% - 80px);
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
