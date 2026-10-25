@@ -1,7 +1,7 @@
 // Site-wide settings. Update these in one place.
 
-// TODO: replace with your real email address
-export const CONTACT_EMAIL = "hello@sambastreet.org";
+// Google Workspace alias of the main mailbox.
+export const CONTACT_EMAIL = "hello@sambastreet.charity";
 
 export const SITE_NAME = "Samba Street";
 export const SITE_DESCRIPTION =

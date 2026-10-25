@@ -58,7 +58,7 @@ Unsplash blocks scripted downloads from its website. Downloading straight from `
 
 ## Still open / to fill in
 
-- **Contact email:** `hello@sambastreet.org` is a placeholder. Change it in `src/site.ts`.
+- **Contact email:** `hello@sambastreet.charity` (set in `src/site.ts`). It is a free Google Workspace alias of the user's own mailbox, not a separate account.
 - **Partner school:** name, training days and location are unknown until a school is found.
 - **Real photos** of our own kids and team, to replace the stock photos.
 - **Team:** no names yet. The old About page had placeholder names, and it has been removed.

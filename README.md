@@ -75,5 +75,4 @@ The site is live at **https://sambastreet.charity**, hosted for free on GitHub P
 
 ## Still to fill in
 
-- Real contact email (`src/site.ts`)
 - Partner school name, training days and location (once known)

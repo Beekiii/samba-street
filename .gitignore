@@ -4,3 +4,5 @@ dist/
 .DS_Store
 google-service-account.json
 *service-account*.json
+*.mov
+*.mp4
