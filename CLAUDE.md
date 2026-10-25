@@ -81,3 +81,4 @@ Unsplash blocks scripted downloads from its website. Downloading straight from `
 - `npm run build` must pass.
 - Check the page at desktop width and at phone width (375–390px), with no sideways scrolling.
 - Headless Chrome won't render narrower than about 500px. For phone screenshots, use puppeteer-core with mobile emulation, or put the page in a 375px-wide iframe.
+- The repo is **public**. Commit only the files you changed by name (no `git add -A`): the folder often holds the user's own work in progress, like screen recordings and logo drafts.
