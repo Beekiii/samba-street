@@ -34,10 +34,10 @@ The website's current job is to **explain the project and build trust** with pos
 - Current style:
   - off-white background `#f7f5f0`, near-black text
   - one font, **Inter Tight** (Google Fonts)
-  - samba green `#0b6e4f` as a small accent and yellow `#f2b705` used sparingly
+  - logo green `#004b3b` as a small accent and logo yellow `#f5c400` used sparingly (these are the official logo colours)
   - thin lines and spacing give the page its structure
   - all tokens are at the top of `src/styles/global.css`
-- Logo and favicon: two overlapping dots, one green and one yellow, next to the "Samba Street" wordmark.
+- Logo: a round green-and-yellow badge with a celebrating player with dreadlocks (inspired by Tshabalala's 2010 goal) and "SAMBA STREET" around it. Made with ChatGPT; for now it's a PNG in `public/images/logo.png` (also `logo-128.png`, `favicon.png`, `apple-touch-icon.png`). A clean vector version is still to come.
 - Sections fade in as you scroll (`.reveal`). This only happens when JS runs: the layout adds a `js` class to `<html>`, so the content still shows without JS.
 
 ## Current page (src/pages/index.astro), top to bottom

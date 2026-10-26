@@ -4,8 +4,8 @@
   --text: #141414;
   --muted: #6b6a66;
   --rule: #dcd8ce;
-  --accent: #0b6e4f; /* samba green */
-  --sun: #f2b705; /* used sparingly */
+  --accent: #004b3b; /* logo green */
+  --sun: #f5c400; /* logo yellow, used sparingly */
 
   --font: "Inter Tight", system-ui, -apple-system, sans-serif;
   --max: 1080px;

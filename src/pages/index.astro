@@ -54,7 +54,9 @@ const ticker = ["Training twice a week", "Tournaments", "Full gear", "Free for e
     <div class="hero-shade"></div>
 
     <nav class="wrap top">
-      <a href="/" class="wordmark">Samba Street</a>
+      <a href="/" class="wordmark">
+        <img src="/images/logo-128.png" alt="Samba Street" width="64" height="64" />
+      </a>
       <a href={`mailto:${CONTACT_EMAIL}`} class="top-link">Contact</a>
     </nav>
 
@@ -286,21 +288,18 @@ const ticker = ["Training twice a week", "Tournaments", "Full gear", "Free for e
     padding-top: 28px;
   }
   .wordmark {
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    text-decoration: none;
     display: inline-flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .wordmark::before {
-    content: "";
-    width: 12px;
-    height: 12px;
     border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 6px 0 0 var(--sun);
-    margin-right: 6px;
+  }
+  .wordmark img {
+    width: 56px;
+    height: 56px;
+  }
+  @media (min-width: 720px) {
+    .wordmark img {
+      width: 72px;
+      height: 72px;
+    }
   }
   .top-link {
     text-decoration: none;

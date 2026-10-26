@@ -18,7 +18,7 @@ npm run preview  # preview the built site
 | Contact email, site description | `src/site.ts` |
 | Colors and font | top of `src/styles/global.css` |
 | All page text | `src/pages/index.astro` |
-| Favicon | `public/favicon.svg` |
+| Logo and icons | `public/images/logo.png`, `public/images/logo-128.png` (header), `public/favicon.png`, `public/apple-touch-icon.png` |
 
 ## Photos
 
