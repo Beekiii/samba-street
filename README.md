@@ -29,10 +29,10 @@ The photos in `public/images/` are placeholders until the academy has its own ph
 | `hero.jpg` | Top of the page | Thato Moiketsi, Pexels | Pexels License (free) |
 | `khayelitsha-centre.jpg` | About | Andrea Grips, [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Khayelitsha_Football_for_Hope_Centre.jpg) | CC BY-SA 3.0 – credit required |
 | `portrait.jpg` | About | Pexels (photo 40134497) | Pexels License (free) |
-| `khayelitsha-pitch.jpg` | How it works | Ed Suter, [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Young_girl_practices_her_soccer_skills,_Khayelitsha,_Cape_Town.jpg) | CC BY-SA 4.0 – credit required |
-| `training.jpg` | Training tile | Pexels (photo 34228180) | Pexels License (free) |
+| `school-match.jpg` | How it works | Thato Moiketsi, [Pexels](https://www.pexels.com/photo/32422417/) | Pexels License (free) |
+| `training.jpg` | Training tile | [Pexels (photo 28735311)](https://www.pexels.com/photo/28735311/) | Pexels License (free) |
 | `tournament.jpg` | Tournaments tile | Pexels (photo 38717055) | Pexels License (free) |
-| `gear.jpg` | Gear tile | Pexels (photo 30100550) | Pexels License (free) |
+| `gear.jpg` | Gear tile | [Pexels (photo 11326785)](https://www.pexels.com/photo/11326785/) | Pexels License (free) |
 | `street-sunset.jpg` | Partner school section | Rea Mapelele, Pexels | Pexels License (free) |
 
 The two Wikimedia photos need a credit, which is in the page footer. Remove that footer line once those photos are replaced.

@@ -27,7 +27,8 @@ const steps = [
 const provide = [
   {
     img: "/images/training.jpg",
-    alt: "Kids playing football together on a sunny field",
+    alt: "A youth team running a drill together on a dirt pitch",
+    pos: "58% 50%",
     title: "Training",
     text: "Two sessions a week, focused on skills, creativity and playing as a team.",
   },
@@ -39,7 +40,8 @@ const provide = [
   },
   {
     img: "/images/gear.jpg",
-    alt: "Bare feet gathered around a worn football",
+    alt: "A smiling boy in a blue football kit pulling up his socks before playing",
+    pos: "36% 50%",
     title: "Gear",
     text: "Every player gets the kit and gear they need to train and play.",
   },
@@ -152,10 +154,10 @@ const ticker = ["Training twice a week", "Tournaments", "Full gear", "Free for e
       <div class="how-media">
         <figure>
           <img
-            src="/images/khayelitsha-pitch.jpg"
-            alt="A girl dribbling a ball on a football pitch surrounded by houses in Khayelitsha"
+            src="/images/school-match.jpg"
+            alt="Kids in green and white kits playing a match on a dusty school field"
             width="1600"
-            height="1071"
+            height="1067"
             loading="lazy"
           />
         </figure>
@@ -188,7 +190,7 @@ const ticker = ["Training twice a week", "Tournaments", "Full gear", "Free for e
           provide.map((p, i) => (
             <article class="tile">
               <div class="tile-img">
-                <img src={p.img} alt={p.alt} loading="lazy" />
+                <img src={p.img} alt={p.alt} loading="lazy" style={p.pos && `object-position: ${p.pos}`} />
               </div>
               <span class="tile-num">0{i + 1}</span>
               <h3>{p.title}</h3>
@@ -229,9 +231,6 @@ const ticker = ["Training twice a week", "Tournaments", "Full gear", "Free for e
       Photos: Thato Moiketsi, Rea Mapelele and others via Pexels; Andrea Grips (<a
         href="https://commons.wikimedia.org/wiki/File:Khayelitsha_Football_for_Hope_Centre.jpg"
         >CC BY-SA 3.0</a
-      >) and Ed Suter (<a
-        href="https://commons.wikimedia.org/wiki/File:Young_girl_practices_her_soccer_skills,_Khayelitsha,_Cape_Town.jpg"
-        >CC BY-SA 4.0</a
       >) via Wikimedia Commons.
     </p>
   </footer>
@@ -500,6 +499,7 @@ const ticker = ["Training twice a week", "Tournaments", "Full gear", "Free for e
     height: auto;
     aspect-ratio: 4 / 3;
     object-fit: cover;
+    object-position: 38% 50%;
   }
   @media (min-width: 900px) {
     .how-media img {
