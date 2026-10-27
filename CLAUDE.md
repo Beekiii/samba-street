@@ -37,7 +37,7 @@ The website's current job is to **explain the project and build trust** with pos
   - logo green `#004b3b` as a small accent and logo yellow `#f5c400` used sparingly (these are the official logo colours)
   - thin lines and spacing give the page its structure
   - all tokens are at the top of `src/styles/global.css`
-- Logo: a round green-and-yellow badge with a celebrating player with dreadlocks (inspired by Tshabalala's 2010 goal) and "SAMBA STREET" around it. Made with ChatGPT; for now it's a PNG in `public/images/logo.png` (also `logo-128.png`, `favicon.png`, `apple-touch-icon.png`). A clean vector version is still to come.
+- Logo: a round green-and-yellow badge with a celebrating player with dreadlocks (inspired by Tshabalala's 2010 goal) and "SAMBA STREET" around it. Made with ChatGPT. The full-size original (1254×1254 PNG) is `brand/samba-street-logo.png`; the site uses `public/images/logo.png` (also `logo-128.png`, `favicon.png`, `apple-touch-icon.png`). A clean vector version is still to come.
 - Sections fade in as you scroll (`.reveal`). This only happens when JS runs: the layout adds a `js` class to `<html>`, so the content still shows without JS.
 
 ## Current page (src/pages/index.astro), top to bottom
@@ -64,7 +64,7 @@ The website's current job is to **explain the project and build trust** with pos
 - Chosen: the round badge the user made with ChatGPT (see Design direction). It is a PNG; the user knows and wants a proper vector version later.
 - **Next logo step:** redraw as vector with the exact colours `#004B3B` / `#F5C400` (the PNG's own colours are slightly off, about `#003018` and `#f8d808`), reset "SAMBA STREET" in a real font, and make a simplified version for small sizes and embroidery.
 - Raise with the user before printing: purely AI-made art usually can't be copyright-protected (a designer redraw fixes that), and the figure evokes Siphiwe Tshabalala, so ask for his blessing.
-- `logo-concepts/` holds the rejected drafts and is **not committed**. The screen recording of the celebration in the project root must **never be committed** (56 MB, copyrighted footage).
+- The rejected drafts (`logo-concepts/`) were deleted in Oct 2026; the ChatGPT badge is the logo. The screen recording of the celebration in the project root must **never be committed** (56 MB, copyrighted footage).
 
 ## How the user likes to work
 
