@@ -10,10 +10,18 @@ const facts = [
 ];
 
 const steps = [
-  "We partner with one primary school.",
-  "Kids aged 9 to 12 at that school can sign up.",
-  "We select 20 players.",
-  "They train twice a week, play tournaments and get all the gear they need.",
+  {
+    title: "We partner",
+    text: "We team up with one local primary school and build the academy together, drawing on the school's knowledge of its pupils and the community.",
+  },
+  {
+    title: "We build a team",
+    text: "Kids aged 9–12 at the school can sign up, and we select a first group of 20 players. From day one, they train and play as one team.",
+  },
+  {
+    title: "We develop",
+    text: "The team trains twice a week and tests itself in tournaments. Along the way, kids build confidence, discipline and a sense of belonging.",
+  },
 ];
 
 const provide = [
@@ -155,7 +163,16 @@ const ticker = ["Training twice a week", "Tournaments", "Full gear", "Free for e
       <div>
         <h2 class="label">How it works</h2>
         <ol class="body steps">
-          {steps.map((s) => <li>{s}</li>)}
+          {
+            steps.map((s) => (
+              <li>
+                <div>
+                  <h3>{s.title}</h3>
+                  <p>{s.text}</p>
+                </div>
+              </li>
+            ))
+          }
         </ol>
       </div>
     </section>
@@ -507,6 +524,18 @@ const ticker = ["Training twice a week", "Tournaments", "Full gear", "Free for e
     color: var(--accent);
     font-size: 0.9rem;
     padding-top: 0.45em;
+  }
+  .steps h3 {
+    font-size: inherit;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  .steps p {
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    letter-spacing: 0;
+    color: var(--muted);
+    max-width: 34em;
   }
 
   /* ---------- What we provide ---------- */
