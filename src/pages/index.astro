@@ -323,9 +323,24 @@ const ticker = ["Training twice a week", "Tournaments", "Full gear", "Free for e
   }
   .place {
     grid-column: 1 / -1;
-    font-size: 0.875rem;
-    color: var(--sun);
-    margin-bottom: -8px;
+    justify-self: start;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 7px 12px 7px 10px;
+  }
+  .place::before {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--sun);
+    margin-right: 10px;
+    vertical-align: 1px;
   }
   h1 {
     font-size: clamp(2.75rem, 9vw, 6.75rem);
