@@ -7,7 +7,7 @@ Background for anyone (or any new chat) working on this project. See [README.md]
 Samba Street is a charity football academy.
 
 - It will partner with **one school**. No school has been chosen yet; we are still looking.
-- Kids from that school can sign up. We **select 20 kids aged 9–12**.
+- **Boys only**: boys aged 9–12 from that school can sign up, and we **select 20 of them**. The school gives permission for its pupils to sign up; Samba Street organises the whole sign-up and selection. How players are selected is still open (to be discussed with the school).
 - We provide **training twice a week**, enter **tournaments now and then**, and provide **the gear the kids need**.
 - Everything is **completely free** for the kids, their parents and the school.
 
@@ -57,6 +57,23 @@ The website's current job is to **explain the project and build trust** with pos
 - Plain, specific sentences. Avoid stock charity lines ("more than a game", "beyond the pitch") and don't repeat "free" where the page already says it.
 - The user wants critical feedback on their text before it goes in: point out improvements first, then implement.
 - Keep the Wikimedia photo credit in the footer as it is (the user decided).
+
+## Partnership details (confirmed Oct 2026)
+
+- **Training:** twice a week, after school, on the partner school's own field. Days and times are agreed with the school.
+- **Coaches:** every session is led by trained coaches (who exactly is not decided yet).
+- **Tournaments:** occasional only. Never promise a fixed frequency (not "every month" or similar).
+- **Kit:** every player gets a home and away kit plus the gear they need. The kit design is "City Life" (`brand/kits-city-life.png`): home is Cape Town yellow, away is Table Mountain green. The design shows an adidas logo; the user chose to keep it on the vision board.
+- **What we ask of the school:** permission for its pupils to take part, one contact teacher, and use of the school field two afternoons a week.
+- **Timing:** starts **March 2027** and runs until at least the end of the 2027 school year.
+- **Contact:** email `hello@sambastreet.charity` plus a WhatsApp number (shown on the vision board, not on the website).
+- **Website mismatch to fix later:** the site still says "kids" without "boys only", shows a girl in How it works, and doesn't mention trained coaches or the March 2027 start.
+
+## Vision board for principals
+
+- A local teacher from Khayelitsha is pitching Samba Street to principals there, using a vision board shown on a laptop or tablet (also exported as PDF).
+- It lives on claude.ai as a Design canvas: https://claude.ai/artifact/TaHCbcK23SY9NH1NkfgxxA. Four 1600×900 screens in the brand-green style: 1 The vision, 2 The partnership (what we bring / what we ask / the kits / what the school gains), 3 How it will look (5 steps, example week, team sheet), 4 Who is behind Samba Street (the founder's photo and his own story, written by him: keep his wording).
+- The user asked not to include the teacher on the board for now.
 
 ## Logo history
 
