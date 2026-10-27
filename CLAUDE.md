@@ -42,17 +42,41 @@ The website's current job is to **explain the project and build trust** with pos
 
 ## Current page (src/pages/index.astro), top to bottom
 
-1. A full-width hero photo with the headline "Free football for kids who love the game."
-2. Key facts: 20 players · 9–12 years old · 2× training a week · €0 cost.
+1. A full-width hero photo (the user rates it 10/10, keep it) with the logo badge top-left, the headline "Free football for kids who love the game." and a short intro that starts with "Samba Street is a non-profit football academy in Khayelitsha, Cape Town." A separate location line above the headline was tried (faded, yellow, green label) and removed: hard to read or "ugly".
+2. Key facts: 20 players · 9–12 years old · 2× training a week · R0 cost (rand, not euro: the academy is in South Africa).
 3. About, with two photos (Khayelitsha football centre and a portrait).
-4. How it works: 4 steps (partner school → kids sign up → 20 selected → train and play), next to a pitch photo.
-5. What we provide: training, tournaments and gear, as photo tiles (swipeable on phones).
+4. How it works: 3 titled steps (We partner → We build a team → We develop), each with a short grey text, next to a sticky pitch photo. Three redesigns were mocked up earlier (photo timeline, green block, "many to 20" dot grid) and the user chose to **keep this layout**. Don't redesign it unless asked.
+5. What we provide: training, tournaments and gear, as photo tiles (swipeable on phones). No intro sentence under the heading, and no captions under photos anywhere.
 6. Callout: "Now looking for a partner school." with the email link, over a street photo.
 7. Footer: "Non-profit football academy · Khayelitsha, Cape Town" and the photo credits.
+
+## Writing style (user feedback)
+
+- Say **"kids"**, not "children".
+- Name the place as **"Khayelitsha, Cape Town"**: schools know Khayelitsha, sponsors know Cape Town.
+- Plain, specific sentences. Avoid stock charity lines ("more than a game", "beyond the pitch") and don't repeat "free" where the page already says it.
+- The user wants critical feedback on their text before it goes in: point out improvements first, then implement.
+- Keep the Wikimedia photo credit in the footer as it is (the user decided).
+
+## Logo history
+
+- Rejected: stick-figure dancers; NBA-style panels (split, diagonal stripe, crest) with a silhouette cut out of the 2010 broadcast. The user said these "weren't close" or "didn't like any of these layouts".
+- Chosen: the round badge the user made with ChatGPT (see Design direction). It is a PNG; the user knows and wants a proper vector version later.
+- **Next logo step:** redraw as vector with the exact colours `#004B3B` / `#F5C400` (the PNG's own colours are slightly off, about `#003018` and `#f8d808`), reset "SAMBA STREET" in a real font, and make a simplified version for small sizes and embroidery.
+- Raise with the user before printing: purely AI-made art usually can't be copyright-protected (a designer redraw fixes that), and the figure evokes Siphiwe Tshabalala, so ask for his blessing.
+- `logo-concepts/` holds the rejected drafts and is **not committed**. The screen recording of the celebration in the project root must **never be committed** (56 MB, copyrighted footage).
+
+## How the user likes to work
+
+- Show **options as pictures first** (rendered mockups, about 3 options) before building anything visual. Clean up the mockup files afterwards if they aren't used.
+- Feedback is short and direct. If something is "not even close", start over rather than tweaking.
+- Prefers imagery that fits the real context (Khayelitsha, South Africa) over generic stock.
 
 ## Photos
 
 Temporary stock photos in `public/images/`, until we have our own. The up-to-date list with sources and licences is in the **Photos table in README.md**. Two of the photos come from Wikimedia (CC BY-SA) and **need a credit**, which is in the page footer. Remove that credit once those photos are replaced. Only use photos of children with written permission from their parents.
+
+Photo choices (Oct 2026): the user keeps the hero, the girl on the pitch in How it works, the About photos and the Tournaments goalkeeper photo. Training (team drill) and Gear (boy pulling up his socks) were replaced because the old ones didn't match the text. The website is considered finished for now.
 
 Unsplash blocks scripted downloads from its website. Downloading straight from `https://images.unsplash.com/photo-<id>?w=<width>&q=72&fm=jpg` does work.
 
