@@ -1,0 +1,78 @@
+---
+import { CONTACT_EMAIL } from "../site";
+import { getPublishedPosts } from "../journal";
+
+interface Props {
+  /** White text over a photo (homepage hero, journal post). */
+  overlay?: boolean;
+  current?: "journal";
+}
+
+const { overlay = false, current } = Astro.props;
+// The Journal link only appears once there is something to read.
+const hasPosts = (await getPublishedPosts()).length > 0;
+---
+
+<nav class:list={["wrap", "top", { overlay }]}>
+  <a href="/" class="wordmark">
+    <img src="/images/logo-128.png" alt="Samba Street" width="64" height="64" />
+  </a>
+  <div class="links">
+    {
+      hasPosts && (
+        <a
+          href="/journal/"
+          class="top-link"
+          aria-current={current === "journal" ? "page" : undefined}
+        >
+          Journal
+        </a>
+      )
+    }
+    <a href={`mailto:${CONTACT_EMAIL}`} class="top-link">Contact</a>
+  </div>
+</nav>
+
+<style>
+  .top {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 28px;
+  }
+  .top:not(.overlay) {
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .wordmark {
+    display: inline-flex;
+    border-radius: 50%;
+  }
+  .wordmark img {
+    display: block;
+    width: 56px;
+    height: 56px;
+  }
+  @media (min-width: 720px) {
+    .wordmark img {
+      width: 72px;
+      height: 72px;
+    }
+  }
+  .links {
+    display: flex;
+    gap: 28px;
+  }
+  .top-link {
+    text-decoration: none;
+    opacity: 0.85;
+  }
+  .top-link:hover,
+  .top-link[aria-current] {
+    opacity: 1;
+  }
+  .top-link[aria-current] {
+    border-bottom: 2px solid var(--sun);
+  }
+</style>

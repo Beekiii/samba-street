@@ -1,0 +1,31 @@
+---
+interface Props {
+  /** Thin line and extra space above (pages that don't end on a photo). */
+  line?: boolean;
+}
+
+const { line = false } = Astro.props;
+---
+
+<footer class:list={["wrap", "bottom", { line }]}>
+  <span>© {new Date().getFullYear()} Samba Street</span>
+  <span>Non-profit football academy · Khayelitsha, Cape Town</span>
+  <slot />
+</footer>
+
+<style>
+  .bottom {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 28px;
+    padding-bottom: 40px;
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
+  .line {
+    margin-top: 120px;
+    border-top: 1px solid var(--rule);
+  }
+</style>

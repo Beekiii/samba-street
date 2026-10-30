@@ -4,10 +4,22 @@ import { SITE_NAME, SITE_DESCRIPTION } from "../site";
 
 interface Props {
   title?: string;
+  description?: string;
+  /** Share image (path or URL). Defaults to the logo. */
+  image?: string;
+  /** "article" for journal posts. */
+  ogType?: "website" | "article";
   noindex?: boolean;
 }
 
-const { title = `${SITE_NAME} – Free football academy for kids`, noindex = false } = Astro.props;
+const {
+  title = `${SITE_NAME} – Free football academy for kids`,
+  description = SITE_DESCRIPTION,
+  image = "/images/logo.png",
+  ogType = "website",
+  noindex = false,
+} = Astro.props;
+const imageUrl = new URL(image, Astro.site).href;
 ---
 
 <!doctype html>
@@ -17,13 +29,13 @@ const { title = `${SITE_NAME} – Free football academy for kids`, noindex = fal
     <script is:inline>document.documentElement.classList.add("js")</script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
-    <meta name="description" content={SITE_DESCRIPTION} />
+    <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <meta property="og:title" content={title} />
-    <meta property="og:description" content={SITE_DESCRIPTION} />
-    <meta property="og:type" content="website" />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={ogType} />
     <meta name="theme-color" content="#004b3b" />
-    <meta property="og:image" content="https://sambastreet.charity/images/logo.png" />
+    <meta property="og:image" content={imageUrl} />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />

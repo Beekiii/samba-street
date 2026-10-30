@@ -1,6 +1,13 @@
 ---
+import { Image } from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
 import { CONTACT_EMAIL } from "../site";
+import { getPublishedPosts, postUrl, formatDate, isoDate } from "../journal";
+
+// Latest journal posts: one large, up to two small. Hidden until the first post.
+const [lead, ...others] = (await getPublishedPosts()).slice(0, 3);
 
 const facts = [
   { value: "20", label: "Players" },
@@ -63,12 +70,7 @@ const ticker = ["Training twice a week", "Tournaments", "Full gear", "Free for e
     />
     <div class="hero-shade"></div>
 
-    <nav class="wrap top">
-      <a href="/" class="wordmark">
-        <img src="/images/logo-128.png" alt="Samba Street" width="64" height="64" />
-      </a>
-      <a href={`mailto:${CONTACT_EMAIL}`} class="top-link">Contact</a>
-    </nav>
+    <SiteHeader overlay />
 
     <div class="wrap hero-content">
       <h1>Free football<br />for kids who<br />love the game<span class="dot">.</span></h1>
@@ -201,6 +203,51 @@ const ticker = ["Training twice a week", "Tournaments", "Full gear", "Free for e
       </div>
     </section>
 
+    <!-- Latest from the journal: green block, one large post and up to two small -->
+    {
+      lead && (
+        <section class="latest" aria-labelledby="latest-title">
+          <div class="wrap reveal">
+            <h2 id="latest-title" class="latest-label">
+              Latest from the journal
+            </h2>
+            <div class:list={["latest-grid", { single: others.length === 0 }]}>
+              <a class="latest-lead" href={postUrl(lead)}>
+                <div class="latest-img">
+                  <Image
+                    src={lead.data.cover}
+                    alt=""
+                    widths={[480, 720, 1080, 1440]}
+                    sizes="(min-width: 900px) 600px, calc(100vw - 32px)"
+                  />
+                </div>
+                <div>
+                  <time datetime={isoDate(lead.data.date)}>{formatDate(lead.data.date)}</time>
+                  <h3>{lead.data.title}</h3>
+                </div>
+              </a>
+              {others.length > 0 && (
+                <div class="latest-side">
+                  {others.map((post) => (
+                    <a href={postUrl(post)}>
+                      <Image src={post.data.cover} alt="" widths={[240, 480]} sizes="112px" />
+                      <div>
+                        <time datetime={isoDate(post.data.date)}>{formatDate(post.data.date)}</time>
+                        <h3>{post.data.title}</h3>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+            <a class="latest-more" href="/journal/">
+              All journal entries →
+            </a>
+          </div>
+        </section>
+      )
+    }
+
     <!-- Partner school callout over photo -->
     <section class="callout">
       <img
@@ -224,9 +271,7 @@ const ticker = ["Training twice a week", "Tournaments", "Full gear", "Free for e
     </section>
   </main>
 
-  <footer class="wrap bottom">
-    <span>© {new Date().getFullYear()} Samba Street</span>
-    <span>Non-profit football academy · Khayelitsha, Cape Town</span>
+  <SiteFooter>
     <p class="credits">
       Photos: Thato Moiketsi, Rea Mapelele and others via Pexels; Andrea Grips (<a
         href="https://commons.wikimedia.org/wiki/File:Khayelitsha_Football_for_Hope_Centre.jpg"
@@ -236,7 +281,7 @@ const ticker = ["Training twice a week", "Tournaments", "Full gear", "Free for e
         >CC BY-SA 4.0</a
       >) via Wikimedia Commons.
     </p>
-  </footer>
+  </SiteFooter>
 
   <script>
     // Fade sections in as they scroll into view.
@@ -295,34 +340,6 @@ const ticker = ["Training twice a week", "Tournaments", "Full gear", "Free for e
       rgba(0, 0, 0, 0.15) 55%,
       rgba(0, 0, 0, 0.7) 100%
     );
-  }
-  .top {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 28px;
-  }
-  .wordmark {
-    display: inline-flex;
-    border-radius: 50%;
-  }
-  .wordmark img {
-    width: 56px;
-    height: 56px;
-  }
-  @media (min-width: 720px) {
-    .wordmark img {
-      width: 72px;
-      height: 72px;
-    }
-  }
-  .top-link {
-    text-decoration: none;
-    opacity: 0.85;
-  }
-  .top-link:hover {
-    opacity: 1;
   }
   .hero-content {
     position: relative;
@@ -629,6 +646,115 @@ const ticker = ["Training twice a week", "Tournaments", "Full gear", "Free for e
     max-width: 22em;
   }
 
+  /* ---------- Latest from the journal ---------- */
+  .latest {
+    background: var(--accent);
+    color: #fff;
+    padding: 112px 0 120px;
+  }
+  .latest-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .latest a {
+    text-decoration: none;
+  }
+  .latest time {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.65);
+  }
+  .latest-grid {
+    display: grid;
+    gap: 40px;
+    margin-top: 40px;
+  }
+  @media (min-width: 900px) {
+    .latest-grid {
+      grid-template-columns: 3fr 2fr;
+      gap: 48px;
+    }
+    /* Only one post so far: photo and title side by side. */
+    .latest-grid.single {
+      grid-template-columns: 1fr;
+    }
+    .single .latest-lead {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 48px;
+      align-items: end;
+    }
+  }
+  .latest-img {
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .single .latest-img {
+    margin-bottom: 0;
+  }
+  .latest-img :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  .latest-lead:hover .latest-img :global(img) {
+    transform: scale(1.03);
+  }
+  .latest-lead h3 {
+    margin-top: 6px;
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+    font-weight: 500;
+    letter-spacing: -0.035em;
+    line-height: 1.08;
+  }
+  .latest-side {
+    display: grid;
+    align-content: start;
+  }
+  .latest-side a {
+    display: grid;
+    grid-template-columns: 112px 1fr;
+    gap: 20px;
+    padding: 24px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  @media (min-width: 900px) {
+    .latest-side a:first-child {
+      padding-top: 0;
+      border-top: 0;
+    }
+  }
+  .latest-side :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+  .latest-side h3 {
+    margin-top: 2px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+  }
+  .latest-lead:hover h3,
+  .latest-side a:hover h3 {
+    color: var(--sun);
+  }
+  .latest-more {
+    display: inline-block;
+    margin-top: 40px;
+    border-bottom: 2px solid var(--sun);
+    padding-bottom: 2px;
+  }
+  .latest-more:hover {
+    color: var(--sun);
+  }
+
   /* ---------- Callout ---------- */
   .callout {
     position: relative;
@@ -683,18 +809,7 @@ const ticker = ["Training twice a week", "Tournaments", "Full gear", "Free for e
     color: var(--sun);
   }
 
-  /* ---------- Footer ---------- */
-  .bottom {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 8px;
-    padding-top: 28px;
-    padding-bottom: 40px;
-    font-size: 0.875rem;
-    color: var(--muted);
-  }
-
+  /* ---------- Footer photo credits ---------- */
   .credits {
     flex-basis: 100%;
     font-size: 0.75rem;

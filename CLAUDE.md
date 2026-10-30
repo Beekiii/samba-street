@@ -19,7 +19,7 @@ The website's current job is to **explain the project and build trust** with pos
 - **Tech:** Astro static site, plain CSS (no Tailwind), no JavaScript framework.
 - **No interactive features yet:** no forms, sign-ups or similar. These come later, once a partner school is found. Contact is only a `mailto:` email link.
 - **Branding:** there was no existing logo or colours, so we designed our own (see below).
-- **Structure:** a **single page** for now. The first version had Home, Program and About pages. The user asked to cut it down to one page.
+- **Structure:** one main page plus the **Journal** (news and blog, added Oct 2026, see below). The first version had Home, Program and About pages. The user asked to cut it down to one page; keep the information on the homepage.
 
 ## Design direction (user feedback)
 
@@ -42,13 +42,28 @@ The website's current job is to **explain the project and build trust** with pos
 
 ## Current page (src/pages/index.astro), top to bottom
 
-1. A full-width hero photo (the user rates it 10/10, keep it) with the logo badge top-left, the headline "Free football for kids who love the game." and a short intro that starts with "Samba Street is a non-profit football academy in Khayelitsha, Cape Town." A separate location line above the headline was tried (faded, yellow, green label) and removed: hard to read or "ugly".
+1. A full-width hero photo (the user rates it 10/10, keep it) with the logo badge top-left (Journal and Contact links top-right), the headline "Free football for kids who love the game." and a short intro that starts with "Samba Street is a non-profit football academy in Khayelitsha, Cape Town." A separate location line above the headline was tried (faded, yellow, green label) and removed: hard to read or "ugly".
 2. Key facts: 20 players · 9–12 years old · 2× training a week · R0 cost (rand, not euro: the academy is in South Africa).
 3. About, with two photos (Khayelitsha football centre and a portrait).
 4. How it works: 3 titled steps (We partner → We build a team → We develop), each with a short grey text, next to a sticky pitch photo. Three redesigns were mocked up earlier (photo timeline, green block, "many to 20" dot grid) and the user chose to **keep this layout**. Don't redesign it unless asked.
 5. What we provide: training, tournaments and gear, as photo tiles (swipeable on phones). No intro sentence under the heading, and no captions under photos anywhere.
-6. Callout: "Now looking for a partner school." with the email link, over a street photo.
-7. Footer: "Non-profit football academy · Khayelitsha, Cape Town" and the photo credits.
+6. Latest from the journal: green block with the newest post large and up to two smaller ones. Hidden until the first post is published.
+7. Callout: "Now looking for a partner school." with the email link, over a street photo.
+8. Footer: "Non-profit football academy · Khayelitsha, Cape Town" and the photo credits.
+
+Header and footer are shared components (`src/components/SiteHeader.astro`, `SiteFooter.astro`). The Journal link only shows once there is a published post.
+
+## Journal (added Oct 2026)
+
+- **Why:** to keep partner schools, parents and sponsors up to date. Text and photos now; **videos are the next step** (probably a YouTube link field, not uploads).
+- **Pages:** `/journal/` lists posts, alternating photo left/right (mockup option C). `/journal/<slug>/` opens with a full-width cover photo with the title on it, like the homepage hero (mockup option B). The user chose this mix from three mockups; don't redesign without asking.
+- **Writing:** the user writes in **Pages CMS** (app.pagescms.org, logs in with GitHub). Config is `.pages.yml`; every save is a commit to `main`, which deploys. Fields: title, date, summary, cover, coverAlt, draft, body. They must match `src/content.config.ts`. Filename is `{primary}.md` (the slugified title) and becomes the URL.
+- **Photos:** uploaded to `src/assets/journal/` and written into posts as `../../assets/journal/…`, so Astro resizes them. Photos inside the text get several sizes from a small rehype plugin in `astro.config.mjs`. Only JPG, PNG and WebP.
+- **Drafts** (`draft: true`) are committed but never built; filtering is in `src/journal.ts`.
+- **Empty `.gitkeep` files** keep `src/content/journal/` and `src/assets/journal/` on GitHub when they have no posts or photos. Don't delete them: if the photo folder is missing, Pages CMS shows "Media folder not found" and hides its upload button.
+- **No posts yet** (Oct 2026). With zero posts the build prints "collection journal does not exist or is empty" warnings; that's expected. After removing the last post locally, build with `npx astro build --force` (stale content cache). GitHub Actions builds from scratch.
+- **Privacy:** original uploads are public in the repo, including any GPS data in phone photos. The README asks the user to turn off camera location tagging. The resized photos on the site have no metadata.
+- **To check with the user** after setup: that a full-size phone photo uploads in Pages CMS (upload size limits are unknown).
 
 ## Writing style (user feedback)
 
@@ -86,6 +101,7 @@ The website's current job is to **explain the project and build trust** with pos
 ## How the user likes to work
 
 - Show **options as pictures first** (rendered mockups, about 3 options) before building anything visual. Clean up the mockup files afterwards if they aren't used.
+- Put the options **side by side in one comparison picture** (one column per option, one row per page or section; a separate picture for phone) and open it for the user with `open <file>`. File links alone weren't enough. The user likes to mix options (for example "C for these pages, B for that one").
 - Feedback is short and direct. If something is "not even close", start over rather than tweaking.
 - Prefers imagery that fits the real context (Khayelitsha, South Africa) over generic stock.
 
@@ -93,7 +109,7 @@ The website's current job is to **explain the project and build trust** with pos
 
 Temporary stock photos in `public/images/`, until we have our own. The up-to-date list with sources and licences is in the **Photos table in README.md**. Two of the photos come from Wikimedia (CC BY-SA) and **need a credit**, which is in the page footer. Remove that credit once those photos are replaced. Only use photos of children with written permission from their parents.
 
-Photo choices (Oct 2026): the user keeps the hero, the girl on the pitch in How it works, the About photos and the Tournaments goalkeeper photo. Training (team drill) and Gear (boy pulling up his socks) were replaced because the old ones didn't match the text. The website is considered finished for now.
+Photo choices (Oct 2026): the user keeps the hero, the girl on the pitch in How it works, the About photos and the Tournaments goalkeeper photo. Training (team drill) and Gear (boy pulling up his socks) were replaced because the old ones didn't match the text.
 
 Unsplash blocks scripted downloads from its website. Downloading straight from `https://images.unsplash.com/photo-<id>?w=<width>&q=72&fm=jpg` does work.
 

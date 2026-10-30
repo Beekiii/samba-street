@@ -18,6 +18,9 @@ npm run preview  # preview the built site
 | Contact email, site description | `src/site.ts` |
 | Colors and font | top of `src/styles/global.css` |
 | All page text | `src/pages/index.astro` |
+| Journal posts | In the browser via Pages CMS (see [Journal](#journal) below). Files: `src/content/journal/` (text), `src/assets/journal/` (photos) |
+| Journal pages and design | `src/pages/journal/` (list and post pages), the green strip in `src/pages/index.astro` |
+| Header and footer | `src/components/SiteHeader.astro`, `src/components/SiteFooter.astro` |
 | Logo and icons | `brand/samba-street-logo.png` (full-size original), `public/images/logo.png`, `public/images/logo-128.png` (header), `public/favicon.png`, `public/apple-touch-icon.png` |
 
 ## Photos
@@ -36,6 +39,49 @@ The photos in `public/images/` are placeholders until the academy has its own ph
 | `street-sunset.jpg` | Partner school section | Rea Mapelele, Pexels | Pexels License (free) |
 
 The two Wikimedia photos need a credit, which is in the page footer. Remove that footer line once those photos are replaced.
+
+## Journal
+
+News and stories live at **https://sambastreet.charity/journal**. Posts are written in the browser with [Pages CMS](https://pagescms.org), a free editor that saves straight into this GitHub repo. No code needed.
+
+The **Journal** link in the header and the green "Latest from the journal" block on the homepage appear automatically once the first post is published. Until then, /journal shows "First entry coming soon."
+
+### One-time setup
+
+1. Go to https://app.pagescms.org and sign in with the GitHub account that owns the repo.
+2. When asked, install the Pages CMS app on the `samba-street` repository (only that repo is needed).
+3. Open **samba-street**. You will see **Journal** in the menu.
+
+### Write a post
+
+1. Open **Journal → Add an entry**.
+2. Fill in:
+   - **Title**: also becomes the web address, for example `/journal/week-one-of-training/`. Changing the title later doesn't change the address.
+   - **Date**: today by default. Posts are sorted newest first.
+   - **Summary**: one or two sentences for the list and for link previews (WhatsApp, Facebook and so on).
+   - **Cover photo**: the big photo at the top of the post. A landscape photo works best.
+   - **Cover photo description**: a few words on what the photo shows, for people who can't see it.
+   - **Text**: the post itself. To add a photo between paragraphs, type `/` and choose **Image**.
+3. Click **Save**. The site is updated within 1–2 minutes.
+
+To save a post without showing it yet, turn on **Draft**. Turn it off and save again to publish. Editing or deleting a post works the same way: open it, change it and save.
+
+### Photos
+
+- Use JPG or PNG. iPhone HEIC photos don't work. Most phones convert to JPG automatically when you upload from the browser.
+- No need to make photos smaller first: the website automatically makes small versions for phones. The original upload is kept in the repo.
+- Only use photos of kids with written permission from their parents.
+- **Turn off location tagging** on the phone you use for academy photos (iPhone: Settings → Privacy & Security → Location Services → Camera → Never; Android: camera settings → Location tags off). Phone photos often contain where they were taken, and the original files are visible in the public GitHub repo. The photos shown on the website don't contain this.
+
+Videos are a later step: they will most likely be embedded from YouTube rather than uploaded.
+
+### How it works (for developers)
+
+- Settings for the editor: `.pages.yml`. Fields must match the schema in `src/content.config.ts`.
+- Posts are Markdown files in `src/content/journal/`. Photos are in `src/assets/journal/` and are referenced with relative paths (`../../assets/journal/…`), so Astro resizes them. A small plugin in `astro.config.mjs` gives photos inside the text several sizes.
+- Drafts are filtered out in `src/journal.ts`.
+- The empty `.gitkeep` files in `src/content/journal/` and `src/assets/journal/` keep those folders on GitHub while they're empty. Don't delete them: without the photo folder, Pages CMS can't upload photos.
+- If you delete the last post locally, run `npx astro build --force` once to clear Astro's cache. GitHub always builds from scratch.
 
 ## Finance dashboard (private)
 
