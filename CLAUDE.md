@@ -19,7 +19,7 @@ The website's current job is to **explain the project and build trust** with pos
 - **Tech:** Astro static site, plain CSS (no Tailwind), no JavaScript framework.
 - **No interactive features yet:** no forms, sign-ups or similar. These come later, once a partner school is found. Contact is only a `mailto:` email link.
 - **Branding:** there was no existing logo or colours, so we designed our own (see below).
-- **Structure:** one main page plus the **Journal** (news and blog, added Oct 2026, see below). The first version had Home, Program and About pages. The user asked to cut it down to one page; keep the information on the homepage.
+- **Structure:** one main page plus the **Journal** (news and blog, added Oct 2026, hidden until the first post, see below). The first version had Home, Program and About pages. The user asked to cut it down to one page; keep the information on the homepage.
 
 ## Design direction (user feedback)
 
@@ -61,9 +61,11 @@ Header and footer are shared components (`src/components/SiteHeader.astro`, `Sit
 - **Photos:** uploaded to `src/assets/journal/` and written into posts as `../../assets/journal/…`, so Astro resizes them. Photos inside the text get several sizes from a small rehype plugin in `astro.config.mjs`. Only JPG, PNG and WebP.
 - **Drafts** (`draft: true`) are committed but never built; filtering is in `src/journal.ts`.
 - **Empty `.gitkeep` files** keep `src/content/journal/` and `src/assets/journal/` on GitHub when they have no posts or photos. Don't delete them: if the photo folder is missing, Pages CMS shows "Media folder not found" and hides its upload button.
+- **Off until the first post** (the user's choice, Oct 2026): with no published posts nothing of the Journal is built, not even `/journal/`, so the live site looks as it did before the Journal. The list page is a rest route (`src/pages/journal/[...list].astro`) so its `getStaticPaths` can return nothing. Publishing the first non-draft post switches everything on. The user tried it with a test post (since deleted) and said it "looks perfect".
 - **No posts yet** (Oct 2026). With zero posts the build prints "collection journal does not exist or is empty" warnings; that's expected. After removing the last post locally, build with `npx astro build --force` (stale content cache). GitHub Actions builds from scratch.
 - **Privacy:** original uploads are public in the repo, including any GPS data in phone photos. The README asks the user to turn off camera location tagging. The resized photos on the site have no metadata.
-- **To check with the user** after setup: that a full-size phone photo uploads in Pages CMS (upload size limits are unknown).
+- **Upload size:** a 1.4 MB PNG uploaded fine in Pages CMS (Oct 2026 test). A full-size phone photo (often 3–8 MB) is still untested; check it with the user when the first real post is written.
+- **Setup in Pages CMS:** after the first push the editor showed only Admin items (Actions, Collaborators, Configuration) and no Journal; a browser reload fixed it.
 
 ## Writing style (user feedback)
 

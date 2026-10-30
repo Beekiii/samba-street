@@ -44,7 +44,7 @@ The two Wikimedia photos need a credit, which is in the page footer. Remove that
 
 News and stories live at **https://sambastreet.charity/journal**. Posts are written in the browser with [Pages CMS](https://pagescms.org), a free editor that saves straight into this GitHub repo. No code needed.
 
-The **Journal** link in the header and the green "Latest from the journal" block on the homepage appear automatically once the first post is published. Until then, /journal shows "First entry coming soon."
+The Journal stays off the website until the first post is published: until then there is no /journal page, no Journal link in the header and no "Latest from the journal" block on the homepage. Publishing the first post (with **Draft** off) switches all of it on automatically, so keep **Draft** on while you're trying things out.
 
 ### One-time setup
 
@@ -80,6 +80,7 @@ Videos are a later step: they will most likely be embedded from YouTube rather t
 - Settings for the editor: `.pages.yml`. Fields must match the schema in `src/content.config.ts`.
 - Posts are Markdown files in `src/content/journal/`. Photos are in `src/assets/journal/` and are referenced with relative paths (`../../assets/journal/…`), so Astro resizes them. A small plugin in `astro.config.mjs` gives photos inside the text several sizes.
 - Drafts are filtered out in `src/journal.ts`.
+- With no published posts, no Journal pages are built at all. That's why the list page is `src/pages/journal/[...list].astro`: a normal page is always built, but this one's `getStaticPaths` can return nothing.
 - The empty `.gitkeep` files in `src/content/journal/` and `src/assets/journal/` keep those folders on GitHub while they're empty. Don't delete them: without the photo folder, Pages CMS can't upload photos.
 - If you delete the last post locally, run `npx astro build --force` once to clear Astro's cache. GitHub always builds from scratch.
 

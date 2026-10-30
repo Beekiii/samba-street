@@ -3,9 +3,17 @@ import { Image } from "astro:assets";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import SiteHeader from "../../components/SiteHeader.astro";
 import SiteFooter from "../../components/SiteFooter.astro";
-import { getPublishedPosts, postUrl, formatDate, isoDate } from "../../journal";
+import { getPublishedPosts, postUrl, formatDate, isoDate, type Post } from "../../journal";
 
-const posts = await getPublishedPosts();
+// The Journal stays off the website until the first post is published:
+// with no posts, /journal/ isn't built at all. A normal page is always built,
+// so this is a [...rest] route, where getStaticPaths can return nothing.
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  return posts.length > 0 ? [{ params: { list: undefined }, props: { posts } }] : [];
+}
+
+const { posts } = Astro.props as { posts: Post[] };
 ---
 
 <BaseLayout
@@ -16,8 +24,6 @@ const posts = await getPublishedPosts();
 
   <main class="wrap">
     <h1>Journal<span class="dot">.</span></h1>
-
-    {posts.length === 0 && <p class="empty">First entry coming soon.</p>}
 
     {
       posts.map((post, i) => (
@@ -55,11 +61,6 @@ const posts = await getPublishedPosts();
   }
   .dot {
     color: var(--sun);
-  }
-  .empty {
-    padding: 40px 0;
-    border-top: 1px solid var(--rule);
-    color: var(--muted);
   }
 
   /* One row per post: photo and text side by side, alternating sides. */
